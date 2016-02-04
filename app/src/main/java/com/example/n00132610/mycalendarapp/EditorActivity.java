@@ -160,6 +160,7 @@ public class EditorActivity extends AppCompatActivity {
             timeButton.setEnabled(true);
             editorLocation.setEnabled(true);
             locationButton.setEnabled(true);
+            
             //saveButton.setEnabled(true);
             //saveButton = (FloatingActionButton) findViewById(R.id.fabSave);
         }
