@@ -1,0 +1,153 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.n00132610.mycalendarapp.EditorActivity">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:gravity="bottom"
+        android:hint="@string/description"
+        android:height="120dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="25dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+
+    <!-- This is the design for the Date info line -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Date"
+        android:textSize="28dp"
+        android:id="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/editDate"
+        android:layout_alignRight="@+id/textView4"
+        android:layout_alignEnd="@+id/textView4"/>
+
+    <EditText
+        android:id="@+id/editDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="100dp"
+        android:inputType="date"
+        android:layout_below="@+id/editText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:id="@+id/imgButtonCal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#fafafa"
+        android:src="@drawable/ic_calendar_check_grey600_24dp"
+        android:onClick="showDatePickerDialog"
+        android:layout_alignTop="@+id/editDate"
+        android:layout_toLeftOf="@+id/editDate"
+        android:layout_toStartOf="@+id/editDate"/>
+
+  <!-- This is the design for the Time info line  -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Time"
+        android:textSize="28dp"
+        android:id="@+id/textView4"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTime"
+        android:width="100dp"
+        android:layout_alignTop="@+id/textView4"
+        android:layout_alignLeft="@+id/editDate"
+        android:layout_alignStart="@+id/editDate" />
+
+    <ImageButton
+        android:id="@+id/imgButtonClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_clock_grey600_24dp"
+        android:onClick="onButtonClicked"
+        android:backgroundTint="#fafafa"
+        android:layout_alignTop="@+id/editTime"
+        android:layout_alignLeft="@+id/imgButtonCal"
+        android:layout_alignStart="@+id/imgButtonCal" />
+
+    <!-- This is the design for the location info.
+
+    Its only a text view for the moment until me and keith can implement our apps together -->
+
+    <ImageButton
+        android:id="@+id/imgButtonMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_map_marker_grey600_24dp"
+        android:backgroundTint="#fafafa"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignLeft="@+id/imgButtonCal"
+        android:layout_alignStart="@+id/imgButtonCal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Location"
+        android:textSize="28dp"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/editTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="60dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_content_save_white_24dp"
+        android:onClick="onSaveNote"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editLocation"
+        android:width="100dp"
+        android:layout_alignBottom="@+id/imgButtonMap"
+        android:layout_toRightOf="@+id/imgButtonMap"
+        android:layout_toEndOf="@+id/imgButtonMap" />
+
+    <!--<android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_pencil_white_24dp"
+        android:onClick="enableFields"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />-->
+
+</RelativeLayout>
