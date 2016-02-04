@@ -45,14 +45,14 @@ public class EditorActivity extends AppCompatActivity {
     private ImageButton dateButton;
     private ImageButton timeButton;
     private ImageButton locationButton;
-    private MenuView.ItemView editNote;
+    //private MenuView.ItemView editNote;
     private String noteFilter;
     private String oldText;
     private String oldDate;
     private String oldTime;
     private String oldLocation;
 
-    private FloatingActionButton saveButton;
+    //private FloatingActionButton saveButton;
     //private FloatingActionButton enableSave;
 
     @Override
@@ -162,11 +162,6 @@ public class EditorActivity extends AppCompatActivity {
             locationButton.setEnabled(true);
             //saveButton.setEnabled(true);
             //saveButton = (FloatingActionButton) findViewById(R.id.fabSave);
-
-            if {
-
-            }
-
         }
     }
     private void deleteNote() {
