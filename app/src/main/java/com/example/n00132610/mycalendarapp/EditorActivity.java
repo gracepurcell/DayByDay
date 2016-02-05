@@ -237,4 +237,9 @@ public class EditorActivity extends AppCompatActivity {
         DatePickerFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
+
+    public void openMapFragment(View v) {
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivity(intent);
+    }
 }

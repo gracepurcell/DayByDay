@@ -21,5 +21,7 @@
     <string name="edit">edit</string>
     <string name="delete_note_example">this is how you will delete note</string>
     <string name="edit_note">Edit note</string>
-    <string name="save">save note</string>
+
+    <string name="map_info">Map info</string>
+    <string name="map_fragment">Map Fragment</string>
 </resources>
