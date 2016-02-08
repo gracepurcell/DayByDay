@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -36,6 +37,7 @@ public class EditorActivity extends AppCompatActivity {
 
     public static final String KEY_ID = "id";
     public static final String KEY_TIME = "time" ;
+    public static final String KEY_LOCAT = "location";
 
     private String action;
     private EditText editor;
@@ -89,7 +91,15 @@ public class EditorActivity extends AppCompatActivity {
                     String dateString= DateFormat.format("yyyy-MM-dd", d).toString();
                     editorDate.setText(dateString);
                 }
+
+                long location = intent.getLongExtra(KEY_LOCAT, 0);
+                if ( location !=0) {
+                    Location loc = new Location(String.valueOf(location));
+                    //String whereString= DateFormat.format(loc).toString();
+                    editorLocation.setText(String.valueOf(loc));
+                }
             }
+
             else {
                 action = Intent.ACTION_EDIT;
                 setTitle(getString(R.string.edit_note));

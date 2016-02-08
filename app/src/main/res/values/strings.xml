@@ -24,4 +24,6 @@
 
     <string name="map_info">Map info</string>
     <string name="map_fragment">Map Fragment</string>
+    <string name="location_btn">Location</string>
+    <string name="save_location_btn">Save Location</string>
 </resources>

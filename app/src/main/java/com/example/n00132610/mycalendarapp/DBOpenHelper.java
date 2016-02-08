@@ -17,10 +17,12 @@ public class DBOpenHelper extends SQLiteOpenHelper{
     public static final String NOTE_DATE = "noteDate";
     public static final String NOTE_TIME = "noteTime";
     public static final String NOTE_LOCATION = "noteLocation";
+    public static final String NOTE_LAT = "noteLat";
+    public static final String NOTE_LNG = "noteLng";
     public static final String NOTE_CREATED = "noteCreated";
 
     public static final String[] ALL_COLUMNS =
-            {NOTE_ID, NOTE_TEXT, NOTE_DATE, NOTE_TIME, NOTE_LOCATION, NOTE_CREATED};
+            {NOTE_ID, NOTE_TEXT, NOTE_DATE, NOTE_TIME, NOTE_LOCATION, NOTE_LAT, NOTE_LNG, NOTE_CREATED};
 
     //SQL to create table
     private static final String TABLE_CREATE =
@@ -30,6 +32,8 @@ public class DBOpenHelper extends SQLiteOpenHelper{
                     NOTE_DATE + " TEXT, " +
                     NOTE_TIME + " TEXT, " +
                     NOTE_LOCATION + " TEXT, " +
+                    NOTE_LAT + " TEXT, " +
+                    NOTE_LNG + " TEXT, " +
                     NOTE_CREATED + " TEXT default CURRENT_TIMESTAMP" +
                     ")";
 

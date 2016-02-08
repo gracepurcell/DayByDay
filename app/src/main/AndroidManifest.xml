@@ -57,7 +57,7 @@
                 android:value="com.example.n00132610.mycalendarapp.MainActivity" />
         </activity>
 
-        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyApqjfFtM3uJdptSIhKWNLVaEhp1KTufTI" />
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyApqjfFtM3uJdptSIhKWNLVaEhp1KTufTI" />
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
     </application>

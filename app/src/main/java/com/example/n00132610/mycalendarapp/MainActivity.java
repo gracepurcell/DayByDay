@@ -95,11 +95,6 @@ public class MainActivity extends AppCompatActivity
                 Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);
 
-       /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.are_you_sure))
-                .setPositiveButton(getString(android.R.string.yes), onLongClickListener)
-                .setNegativeButton(getString(android.R.string.no))
-                .show();*/
         finish();
     }
 
@@ -162,9 +157,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void insertSampleData() {
-        insertNote("simple note ", "0/0/0", "00:00", "0.000");
-        insertNote("Multi-line\nnote", "0/0/0", "00:00", "0.000");
-        insertNote("Very long note with a lot of text that exceeds the width of the screen", "0/0/0", "00:00", "0.000");
+        insertNote("Walk the dog", "2016-02-12", "15:45", "0.000");
+        insertNote("Hairdresser", "2016-02-15", "12:40", "0.000");
+        insertNote("Swimming lesson", "2016-02-08", "20:00", "0.000");
         restartLoader();
     }
 
