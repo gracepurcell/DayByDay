@@ -4,7 +4,9 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
@@ -39,6 +41,7 @@ public class EditorActivity extends AppCompatActivity {
     public static final String KEY_TIME = "time" ;
     public static final String KEY_LOCAT = "location";
 
+
     private String action;
     private EditText editor;
     private EditText editorDate;
@@ -53,6 +56,7 @@ public class EditorActivity extends AppCompatActivity {
     private String oldDate;
     private String oldTime;
     private String oldLocation;
+    String value = null;
 
     //private FloatingActionButton saveButton;
     //private FloatingActionButton enableSave;
@@ -92,12 +96,11 @@ public class EditorActivity extends AppCompatActivity {
                     editorDate.setText(dateString);
                 }
 
-                long location = intent.getLongExtra(KEY_LOCAT, 0);
-                if ( location !=0) {
-                    Location loc = new Location(String.valueOf(location));
-                    //String whereString= DateFormat.format(loc).toString();
-                    editorLocation.setText(String.valueOf(loc));
-                }
+//                long location = intent.getLongExtra(KEY_LOCAT, 0);
+//                if ( location !=0) {
+//                    Location loc = new Location(String.valueOf(location));
+//                    editorLocation.setText(String.valueOf(location));
+//                }
             }
 
             else {
@@ -252,4 +255,6 @@ public class EditorActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }
+
+
 }

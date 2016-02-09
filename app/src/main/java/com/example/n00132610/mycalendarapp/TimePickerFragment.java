@@ -39,7 +39,4 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         editTime.setText(editTime.getText() + String.valueOf(hourOfDay)
                 + ":" + String.valueOf(minute));
     }
-
-
-
 }

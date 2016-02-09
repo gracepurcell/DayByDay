@@ -2,7 +2,9 @@ package com.example.n00132610.mycalendarapp;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -12,6 +14,7 @@ import android.content.ContentValues;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -63,6 +66,8 @@ public class MapActivity extends FragmentActivity
         LocationListener,
         Serializable {
 
+    SharedPreferences sharedpreference;
+
     GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private Location mCurrentLocation;
@@ -71,6 +76,8 @@ public class MapActivity extends FragmentActivity
     public static final String LOCAT_KEY = "location";
     private GoogleApiClient mLocationClient;
     private Marker marker;
+    Bundle bundle;
+    String value;
     private static final double
             CITY_LAT = 53.3478,
             CITY_LNG = -6.2597;
@@ -84,6 +91,8 @@ public class MapActivity extends FragmentActivity
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        sharedpreference= PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
 
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean enabled = service
@@ -125,14 +134,15 @@ public class MapActivity extends FragmentActivity
             mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         }
 
+        bundle = new Bundle();
+
         btnDraw.setOnClickListener(new View.OnClickListener() {
-        @Override
-            public void onClick(View v){
-                // Checks, whether location is captured
-                Intent intent = new Intent(MapActivity.this, EditorActivity.class);
+
+            @Override
+            public void onClick(View v) {
                 String location = lat + "," + lng;
-                intent.putExtra(EditorActivity.KEY_LOCAT, location);
-                startActivityForResult(intent, EDITOR_REQUEST_CODE);
+                // Checks, whether location is captured
+                ((TextView) findViewById(R.id.editLocation)).setText(location);
             }
         });
     }

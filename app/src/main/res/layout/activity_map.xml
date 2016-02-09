@@ -16,7 +16,8 @@
     android:layout_height="wrap_content"
     android:text="@string/save_location_btn"
     android:layout_alignParentBottom="true"
-    android:layout_centerHorizontal="true" />
+    android:layout_centerHorizontal="true"
+    android:onClick="mapLocationClick"/>
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/map"
