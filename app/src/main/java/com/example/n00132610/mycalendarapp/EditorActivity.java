@@ -1,33 +1,21 @@
 package com.example.n00132610.mycalendarapp;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.ClipData;
+
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuView;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.io.Serializable;
 import java.util.Date;
 
 import static com.example.n00132610.mycalendarapp.DBOpenHelper.NOTE_DATE;
@@ -35,7 +23,7 @@ import static com.example.n00132610.mycalendarapp.DBOpenHelper.NOTE_TEXT;
 import static com.example.n00132610.mycalendarapp.DBOpenHelper.NOTE_TIME;
 import static com.example.n00132610.mycalendarapp.DBOpenHelper.NOTE_LOCATION;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements Serializable {
 
     public static final String KEY_ID = "id";
     public static final String KEY_TIME = "time" ;
@@ -50,7 +38,6 @@ public class EditorActivity extends AppCompatActivity {
     private ImageButton dateButton;
     private ImageButton timeButton;
     private ImageButton locationButton;
-    //private MenuView.ItemView editNote;
     private String noteFilter;
     private String oldText;
     private String oldDate;
@@ -58,8 +45,6 @@ public class EditorActivity extends AppCompatActivity {
     private String oldLocation;
     String value = null;
 
-    //private FloatingActionButton saveButton;
-    //private FloatingActionButton enableSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +60,7 @@ public class EditorActivity extends AppCompatActivity {
         locationButton = (ImageButton) findViewById(R.id.imgButtonMap);
 
         //enableEdit = (FloatingActionButton) findViewById(R.id.fabEdit);
+
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -129,10 +115,7 @@ public class EditorActivity extends AppCompatActivity {
                 editorLocation.setText(oldLocation);
                 editorLocation.setEnabled(false);
                 locationButton.setEnabled(false);
-                //saveButton.setEnabled(false);
                 editor.requestFocus();
-                //enableEdit.setEnabled(true);
-                //enableSave.setEnabled(false);
             }
         }
     }
