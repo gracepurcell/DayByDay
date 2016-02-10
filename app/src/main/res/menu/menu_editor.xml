@@ -16,11 +16,4 @@
         android:icon="@drawable/ic_pencil_white_24dp"
         android:orderInCategory="100"
         app:showAsAction="always"/>
-
-    <!--<item
-        android:id="@+id/action_save"
-        android:title="@string/save"
-        android:icon="@drawable/ic_content_save_white_24dp"
-        android:orderInCategory="100"
-        app:showAsAction="always"/>-->
 </menu>

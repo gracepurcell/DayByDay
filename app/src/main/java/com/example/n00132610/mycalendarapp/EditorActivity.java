@@ -146,6 +146,22 @@ public class EditorActivity extends AppCompatActivity {
         return true;
     }
 
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        MenuItem edit = menu.findItem(R.id.action_edit);
+//
+//        if (action.equals(Intent.ACTION_EDIT)) {
+//            edit.setIcon(R.drawable.ic_action_accept);
+//            edit.setTitle(R.string.action_save);
+//        }
+//        else {
+//            edit.setIcon(R.drawable.ic_pencil_white_24dp);
+//            edit.setTitle(R.string.action_edit);
+//        }
+//        super.onPrepareOptionsMenu(menu);
+//        return false;
+//    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

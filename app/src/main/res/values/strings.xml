@@ -26,4 +26,6 @@
     <string name="map_fragment">Map Fragment</string>
     <string name="location_btn">Location</string>
     <string name="save_location_btn">Save Location</string>
+    <string name="action_save">save changes</string>
+    <string name="action_edit">edit task</string>
 </resources>
