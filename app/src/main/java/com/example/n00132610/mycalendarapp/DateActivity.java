@@ -25,9 +25,10 @@ public class DateActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String TIME_KEY = "time";
     private SimpleCursorAdapter cursorAdapter;
     private Bundle cursorArgs;
+    private Date dt;
     // private FloatingActionButton fab;
 
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class DateActivity extends AppCompatActivity implements LoaderManager.Loa
         final long time = i.getLongExtra(TIME_KEY, -1);
 
         if (time != -1) {
-            Date dt = new Date(time);
+            dt = new Date(time);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             final String dateString = sdf.format(dt);
 
@@ -95,7 +96,14 @@ public class DateActivity extends AppCompatActivity implements LoaderManager.Loa
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_route) {
+            Intent i = new Intent(this, RouteMapActivity.class);
+            i.putExtra(RouteMapActivity.DATE_EXTRA, dt);
+            startActivity(i);
+
+            return true;
+        }
+        else if (id == R.id.action_settings) {
             return true;
         }
 

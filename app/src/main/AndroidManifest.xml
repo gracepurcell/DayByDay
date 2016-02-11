@@ -51,10 +51,19 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/map_fragment"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".EditorActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.n00132610.mycalendarapp.MainActivity" />
+                android:value="com.example.n00132610.mycalendarapp.EditorActivity" />
+        </activity>
+
+        <activity
+            android:name=".RouteMapActivity"
+            android:label="@string/map_fragment"
+            android:parentActivityName=".DateActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.n00132610.mycalendarapp.DateActivity" />
         </activity>
 
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyApqjfFtM3uJdptSIhKWNLVaEhp1KTufTI" />

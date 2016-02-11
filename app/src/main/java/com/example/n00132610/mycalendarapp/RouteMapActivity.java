@@ -2,7 +2,11 @@ package com.example.n00132610.mycalendarapp;
 
 
 import android.app.Dialog;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,7 +16,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,22 +38,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
-public class MapActivity extends FragmentActivity
+public class RouteMapActivity extends FragmentActivity
         implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
-        Serializable {
+        Serializable,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String LATITUDE_EXTRA = "latitude";
-    public static final String LONGITUDE_EXTRA = "longitude";
+    public static final String DATE_EXTRA = "date";
+    private static final int NOTES_LOADER = 0;
+
     GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private Location mCurrentLocation;
     private static final int ERROR_DIALOG_REQUEST = 9001;
-    private static final int EDITOR_REQUEST_CODE = 1001;
-    public static final String LOCAT_KEY = "location";
     private GoogleApiClient mLocationClient;
     private Marker marker;
     Bundle bundle;
@@ -63,11 +68,18 @@ public class MapActivity extends FragmentActivity
     public String lat;
     public String lng;
     String location = lat + "," + lng;
+    private Date dt;
+    private String dateString;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_route_map);
+
+        dt = (Date) getIntent().getSerializableExtra(DATE_EXTRA);
+        dateString = new SimpleDateFormat("yyyy-MM-dd").format(dt);
+
+        getLoaderManager().initLoader(NOTES_LOADER, null, this);
 
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean enabled = service
@@ -79,9 +91,6 @@ public class MapActivity extends FragmentActivity
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
         }
-
-        // Getting reference to Button
-        Button btnDraw = (Button) findViewById(R.id.btn_draw);
 
         if (servicesOK()) {
             mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -108,21 +117,6 @@ public class MapActivity extends FragmentActivity
         } else {
             mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         }
-
-        bundle = new Bundle();
-
-        btnDraw.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Checks, whether location is captured
-                Intent intent = MapActivity.this.getIntent();
-                intent.putExtra(LATITUDE_EXTRA, lat);
-                intent.putExtra(LONGITUDE_EXTRA, lng);
-                MapActivity.this.setResult(RESULT_OK, intent);
-                MapActivity.this.finish();
-            }
-        });
     }
 
     private void gotoLocation(double lat, double lng, float zoom) {
@@ -166,7 +160,7 @@ public class MapActivity extends FragmentActivity
             mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
                 public void onMapLongClick(LatLng latLng) {
-                    Geocoder gc = new Geocoder(MapActivity.this);
+                    Geocoder gc = new Geocoder(RouteMapActivity.this);
                     List<Address> list = null;
 
                     try {
@@ -177,7 +171,7 @@ public class MapActivity extends FragmentActivity
                     }
 
                     Address add = list.get(0);
-                    MapActivity.this.addMarker(add, latLng.latitude, latLng.longitude);
+                    RouteMapActivity.this.addMarker(add, latLng.latitude, latLng.longitude);
                     lat = String.valueOf(marker.getPosition().latitude);
                     lng = String.valueOf(marker.getPosition().longitude);
                 }
@@ -189,7 +183,7 @@ public class MapActivity extends FragmentActivity
                     String msg = marker.getTitle() + " (" +
                             marker.getPosition().latitude + ", " +
                             marker.getPosition().longitude + ")";
-                    Toast.makeText(MapActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RouteMapActivity.this, msg, Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
@@ -209,7 +203,7 @@ public class MapActivity extends FragmentActivity
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                Geocoder gc = new Geocoder(MapActivity.this);
+                Geocoder gc = new Geocoder(RouteMapActivity.this);
                 List<Address> list = null;
                 LatLng ll = marker.getPosition();
                 try {
@@ -277,15 +271,6 @@ public class MapActivity extends FragmentActivity
         shape = mMap.addCircle(circleOptions);
     }
 
-//    public void onLocationSet(String lat, String lng) {
-//        location = mMap.getInstance();
-//        location.set(lat,lng);
-//        EditText editLocation = (EditText) getActivity().findViewById(R.id.editLocation);
-//
-//        String locatStr = sdf.format(location.getTime());
-//        editLocation.setText(locatStr);
-//    }
-
     private void removeEverything() {
 
         marker.remove();
@@ -315,18 +300,34 @@ public class MapActivity extends FragmentActivity
 
     }
 
-//    public void showCurrentLocation(MenuItem item) {
-//        Location currentLocation = LocationServices.FusedLocationApi
-//                .getLastLocation(mLocationClient);
-//        if (currentLocation == null) {
-//            Toast.makeText(this, "Couldn't connect!", Toast.LENGTH_SHORT).show();
-//        } else {
-//            LatLng latLng = new LatLng(
-//                    currentLocation.getLatitude(),
-//                    currentLocation.getLongitude()
-//            );
-//            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-//            mMap.animateCamera(update);
-//        }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case NOTES_LOADER: {
+                // Returns a new CursorLoader
+                return new CursorLoader(
+                        this,                                           // Parent activity context
+                        NotesProvider.CONTENT_URI,                      // Table to query
+                        null,                                           // Projection to return
+                        DBOpenHelper.NOTE_DATE + " = " + dateString,    // No selection clause
+                        null,                                           // No selection arguments
+                        null                                            // Default sort order
+                );
+            }
+            default: {
+                // An invalid id was passed in
+                return null;
+            }
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
 }

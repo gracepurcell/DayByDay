@@ -62,7 +62,7 @@ public class NotesProvider extends ContentProvider{
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-       return database.delete(DBOpenHelper.TABLE_NOTES, selection, selectionArgs);
+        return database.delete(DBOpenHelper.TABLE_NOTES, selection, selectionArgs);
     }
 
     @Override

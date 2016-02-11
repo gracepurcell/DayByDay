@@ -28,6 +28,7 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
     public static final String KEY_ID = "id";
     public static final String KEY_TIME = "time" ;
     public static final String KEY_LOCAT = "location";
+    private static final int MAP_REQUEST_CODE = 1;
 
 
     private String action;
@@ -81,12 +82,6 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
                     String dateString= DateFormat.format("yyyy-MM-dd", d).toString();
                     editorDate.setText(dateString);
                 }
-
-//                long location = intent.getLongExtra(KEY_LOCAT, 0);
-//                if ( location !=0) {
-//                    Location loc = new Location(String.valueOf(location));
-//                    editorLocation.setText(String.valueOf(location));
-//                }
             }
 
             else {
@@ -252,8 +247,18 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
 
     public void openMapFragment(View v) {
         Intent intent = new Intent(this, MapActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, MAP_REQUEST_CODE);
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MAP_REQUEST_CODE && resultCode == RESULT_OK) {
+            String lat = data.getStringExtra(MapActivity.LATITUDE_EXTRA);
+            String lng = data.getStringExtra(MapActivity.LONGITUDE_EXTRA);
 
+            editorLocation.setText(lat + ", " + lng);
+        }
+        else {
+            Toast.makeText(this, "Error!", Toast.LENGTH_LONG).show();
+        }
+    }
 }
