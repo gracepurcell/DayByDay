@@ -44,6 +44,7 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
     private String oldDate;
     private String oldTime;
     private String oldLocation;
+    private boolean mEditmode;
     String value = null;
 
 
@@ -128,8 +129,8 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
 //    public boolean onPrepareOptionsMenu(Menu menu) {
 //        MenuItem edit = menu.findItem(R.id.action_edit);
 //
-//        if (action.equals(Intent.ACTION_EDIT)) {
-//            edit.setIcon(R.drawable.ic_action_accept);
+//        if (mEditmode) {
+//            edit.setIcon(R.drawable.ic_content_save_white_24dp);
 //            edit.setTitle(R.string.action_save);
 //        }
 //        else {
@@ -137,7 +138,8 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
 //            edit.setTitle(R.string.action_edit);
 //        }
 //        super.onPrepareOptionsMenu(menu);
-//        return false;
+//
+//        return true;
 //    }
 
     @Override
@@ -146,27 +148,30 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
 
         switch (item.getItemId()) {
             case android.R.id.home:
+
                 finishEditing();
                 break;
             case R.id.action_delete:
                 deleteNote();
                 break;
             case R.id.action_edit:
-                enableFields();
+                enableFields(!mEditmode);
+                invalidateOptionsMenu();
                 break;
         }
 
         return true;
     }
-    private void enableFields(){
+    private void enableFields(boolean editMode){
+        mEditmode = editMode;
         if(NotesProvider.CONTENT_URI != null) {
-            editor.setEnabled(true);
-            editorDate.setEnabled(true);
-            dateButton.setEnabled(true);
-            editorTime.setEnabled(true);
-            timeButton.setEnabled(true);
-            editorLocation.setEnabled(true);
-            locationButton.setEnabled(true);
+            editor.setEnabled(/*true*/editMode);
+            editorDate.setEnabled(/*true*/editMode);
+            dateButton.setEnabled(/*true*/editMode);
+            editorTime.setEnabled(/*true*/editMode);
+            timeButton.setEnabled(/*true*/editMode);
+            editorLocation.setEnabled(/*true*/editMode);
+            locationButton.setEnabled(/*true*/editMode);
 
             //saveButton.setEnabled(true);
             //saveButton = (FloatingActionButton) findViewById(R.id.fabSave);
