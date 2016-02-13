@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +71,7 @@ public class RouteMapActivity extends FragmentActivity
     String location = lat + "," + lng;
     private Date dt;
     private String dateString;
+    ArrayList<LatLng> markerPoints;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -303,6 +305,9 @@ public class RouteMapActivity extends FragmentActivity
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        markerPoints = new ArrayList<LatLng>();
+
         switch (id) {
             case NOTES_LOADER: {
                 // Returns a new CursorLoader
@@ -315,6 +320,7 @@ public class RouteMapActivity extends FragmentActivity
                         null                                            // Default sort order
                 );
             }
+
             default: {
                 // An invalid id was passed in
                 return null;
