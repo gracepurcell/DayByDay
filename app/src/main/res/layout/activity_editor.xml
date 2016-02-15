@@ -128,26 +128,4 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="60dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_content_save_white_24dp"
-        android:onClick="onSaveNote"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <!--<android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_pencil_white_24dp"
-        android:onClick="enableFields"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />-->
-
 </RelativeLayout>

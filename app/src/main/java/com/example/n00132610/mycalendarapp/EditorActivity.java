@@ -120,27 +120,20 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
     public boolean onCreateOptionsMenu(Menu menu) {
         if (action.equals(Intent.ACTION_EDIT)){
             getMenuInflater().inflate(R.menu.menu_editor, menu);
-        }
+            MenuItem edit = menu.findItem(R.id.action_edit);
 
+            if (mEditmode) {
+                edit.setIcon(R.drawable.ic_content_save_white_24dp);
+                edit.setTitle(R.string.action_save);
+            }
+            else {
+                edit.setIcon(R.drawable.ic_pencil_white_24dp);
+                edit.setTitle(R.string.action_edit);
+            }
+            super.onPrepareOptionsMenu(menu);
+        }
         return true;
     }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        MenuItem edit = menu.findItem(R.id.action_edit);
-//
-//        if (mEditmode) {
-//            edit.setIcon(R.drawable.ic_content_save_white_24dp);
-//            edit.setTitle(R.string.action_save);
-//        }
-//        else {
-//            edit.setIcon(R.drawable.ic_pencil_white_24dp);
-//            edit.setTitle(R.string.action_edit);
-//        }
-//        super.onPrepareOptionsMenu(menu);
-//
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -237,8 +230,6 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
     public void onBackPressed() {
         finishEditing();
     }
-
-    public void onSaveNote(View view) { finishEditing();}
 
     public void onButtonClicked(View v){
         TimePickerFragment newFragment = new TimePickerFragment();

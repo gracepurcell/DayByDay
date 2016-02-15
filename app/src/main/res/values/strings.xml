@@ -29,4 +29,5 @@
     <string name="action_save">save changes</string>
     <string name="action_edit">edit task</string>
     <string name="action_route">Route</string>
+    <string name="save_note">save</string>
 </resources>
