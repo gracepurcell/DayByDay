@@ -118,20 +118,25 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (action.equals(Intent.ACTION_EDIT)){
+        if (action.equals(Intent.ACTION_EDIT)) {
             getMenuInflater().inflate(R.menu.menu_editor, menu);
             MenuItem edit = menu.findItem(R.id.action_edit);
 
             if (mEditmode) {
                 edit.setIcon(R.drawable.ic_content_save_white_24dp);
                 edit.setTitle(R.string.action_save);
-            }
-            else {
+            } else {
                 edit.setIcon(R.drawable.ic_pencil_white_24dp);
                 edit.setTitle(R.string.action_edit);
             }
             super.onPrepareOptionsMenu(menu);
         }
+//        }else if(action.equals(Intent.ACTION_INSERT)){
+//            MenuItem edit = menu.findItem(R.id.action_save);
+//
+//            edit.setIcon(R.drawable.ic_content_save_white_24dp);
+//            edit.setTitle(R.string.action_save);
+//        }
         return true;
     }
 
@@ -141,7 +146,6 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-
                 finishEditing();
                 break;
             case R.id.action_delete:
