@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity
     private CursorAdapter cursorAdapter;
     private String noteFilter;
 
+//    Grace
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
