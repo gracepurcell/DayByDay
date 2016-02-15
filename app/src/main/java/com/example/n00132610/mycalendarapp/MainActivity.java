@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity
     private CursorAdapter cursorAdapter;
     private String noteFilter;
 
-    // Keith
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
