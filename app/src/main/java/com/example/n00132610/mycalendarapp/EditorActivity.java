@@ -61,8 +61,6 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
         timeButton = (ImageButton) findViewById(R.id.imgButtonClock);
         locationButton = (ImageButton) findViewById(R.id.imgButtonMap);
 
-        //enableEdit = (FloatingActionButton) findViewById(R.id.fabEdit);
-
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -131,12 +129,9 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
             }
             super.onPrepareOptionsMenu(menu);
         }
-//        }else if(action.equals(Intent.ACTION_INSERT)){
-//            MenuItem edit = menu.findItem(R.id.action_save);
-//
-//            edit.setIcon(R.drawable.ic_content_save_white_24dp);
-//            edit.setTitle(R.string.action_save);
-//        }
+        else if(action.equals(Intent.ACTION_INSERT)){
+            getMenuInflater().inflate(R.menu.menu_editor_create, menu);
+        }
         return true;
     }
 
@@ -146,7 +141,7 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                finishEditing();
+                onBackPressed();
                 break;
             case R.id.action_delete:
                 deleteNote();
@@ -155,6 +150,9 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
                 enableFields(!mEditmode);
                 invalidateOptionsMenu();
                 break;
+            case R.id.action_save:
+                finishEditing();
+                break;
         }
 
         return true;
@@ -162,13 +160,13 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
     private void enableFields(boolean editMode){
         mEditmode = editMode;
         if(NotesProvider.CONTENT_URI != null) {
-            editor.setEnabled(/*true*/editMode);
-            editorDate.setEnabled(/*true*/editMode);
-            dateButton.setEnabled(/*true*/editMode);
-            editorTime.setEnabled(/*true*/editMode);
-            timeButton.setEnabled(/*true*/editMode);
-            editorLocation.setEnabled(/*true*/editMode);
-            locationButton.setEnabled(/*true*/editMode);
+            editor.setEnabled(editMode);
+            editorDate.setEnabled(editMode);
+            dateButton.setEnabled(editMode);
+            editorTime.setEnabled(editMode);
+            timeButton.setEnabled(editMode);
+            editorLocation.setEnabled(editMode);
+            locationButton.setEnabled(editMode);
 
             //saveButton.setEnabled(true);
             //saveButton = (FloatingActionButton) findViewById(R.id.fabSave);
@@ -193,7 +191,7 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
             case Intent.ACTION_INSERT:
                 if (newText.length() == 0 && newDate.length() == 0 && newTime.length() == 0){
                     setResult(RESULT_CANCELED);
-                } else{
+                }else{
                     insertNote(newText, newDate, newTime, newLocation);
                 }
                 break;
@@ -202,7 +200,10 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
                     deleteNote();
                 }else if (oldText.equals(newText) && oldDate.equals(newDate) && oldTime.equals(newTime) && oldLocation.equals(newLocation)){
                     setResult(RESULT_CANCELED);
-                }else {
+                }else if (mEditmode){
+                    setResult(RESULT_CANCELED);
+                }
+                else {
                     updateNote(newText, newDate, newTime, newLocation);
                 }
         }
@@ -232,7 +233,11 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
 
     @Override
     public void onBackPressed() {
-        finishEditing();
+        if(action.equals(Intent.ACTION_INSERT)){
+            finish();
+        }else{
+            finishEditing();
+        }
     }
 
     public void onButtonClicked(View v){
