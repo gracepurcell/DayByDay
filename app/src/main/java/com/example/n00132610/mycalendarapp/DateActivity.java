@@ -47,6 +47,7 @@ public class DateActivity extends AppCompatActivity implements LoaderManager.Loa
             Toast.makeText(this, "Date selected = " + dateString, Toast.LENGTH_LONG).show();
 
             String[] from = {DBOpenHelper.NOTE_TEXT};
+            String[] waypoints = {DBOpenHelper.NOTE_LOCATION};
             int[] to = {R.id.tvNote};
 
             cursorAdapter = new SimpleCursorAdapter(this,

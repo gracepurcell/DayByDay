@@ -15,6 +15,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +37,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,15 +56,13 @@ public class RouteMapActivity extends FragmentActivity
 
     public static final String DATE_EXTRA = "date";
     private static final int NOTES_LOADER = 0;
+    private static final int NOTES_LOCATION = 1;
+    private final String TAG = "MapsApp";
 
     GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
-    private Location mCurrentLocation;
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private GoogleApiClient mLocationClient;
     private Marker marker;
-    Bundle bundle;
-    String value;
     private static final double
             CITY_LAT = 53.3478,
             CITY_LNG = -6.2597;
@@ -72,6 +74,7 @@ public class RouteMapActivity extends FragmentActivity
     private Date dt;
     private String dateString;
     ArrayList<LatLng> markerPoints;
+    private Loader<Cursor> fromCursorToArrayListString;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -302,6 +305,35 @@ public class RouteMapActivity extends FragmentActivity
 
     }
 
+    ArrayList<LatLng> fromCursorToArrayListString(Cursor c){
+        ArrayList markerPoints = new ArrayList<>();
+        c.moveToFirst();
+        for(int i = 0; i < c.getCount(); i++){
+            String row = c.getString(c.getColumnIndex(DBOpenHelper.NOTE_LOCATION));
+            markerPoints.toArray(new String[]{row});
+            c.moveToNext();
+            Log.i("result ", "Result : " + markerPoints.toString());
+        }
+        return markerPoints;
+    }
+
+//    public ArrayList<LatLng> getAllStringValues() {
+//        ArrayList<String> yourStringValues = new ArrayList<String>();
+//        Cursor result = DBOpenHelper.query(true, notes.db
+//                new String[] { YOUR_COLUMN_NAME }, null, null, null, null,
+//                null, null);
+//
+//        if (result.moveToFirst()) {
+//            do {
+//                yourStringValues.add(result.getString(result
+//                        .getColumnIndex(YOUR_COLUMN_NAME)));
+//            } while (result.moveToNext());
+//        } else {
+//            return null;
+//        }
+//        return YOUR_COLUMN_NAME;
+//    }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -310,7 +342,6 @@ public class RouteMapActivity extends FragmentActivity
 
         switch (id) {
             case NOTES_LOADER: {
-                // Returns a new CursorLoader
                 return new CursorLoader(
                         this,                                           // Parent activity context
                         NotesProvider.CONTENT_URI,                      // Table to query
@@ -321,16 +352,26 @@ public class RouteMapActivity extends FragmentActivity
                 );
             }
 
+            case NOTES_LOCATION: {
+                return new CursorLoader(
+                        this,
+                        NotesProvider.CONTENT_URI,
+                        null,
+                        DBOpenHelper.NOTE_LOCATION,
+                        null,
+                        null
+                );
+            }
+
             default: {
                 // An invalid id was passed in
-                return null;
+                return fromCursorToArrayListString;
             }
         }
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
     }
 
     @Override

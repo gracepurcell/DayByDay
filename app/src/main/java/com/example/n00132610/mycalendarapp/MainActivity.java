@@ -157,9 +157,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void insertSampleData() {
-        insertNote("Walk the dog", "2016-02-12", "15:45", "0.000");
-        insertNote("Hairdresser", "2016-02-15", "12:40", "0.000");
-        insertNote("Swimming lesson", "2016-02-08", "20:00", "0.000");
+        insertNote("Walk the dog", "2016-02-12", "15:45", "53.366889980492545,-6.2345464645444");
+        insertNote("Go Shopping", "2016-02-12", "12:00", "53.3668766812,-6.23445784");
+        insertNote("See Friend", "2016-02-12", "17:00", "53.375729463537284,-6.4456874364646378");
+        insertNote("Hairdresser", "2016-02-15", "12:40", "53.3451254,-6.345411551");
+        insertNote("Swimming lesson", "2016-02-08", "20:00", "53.37464783648367,-6.4367863433373");
         restartLoader();
     }
 

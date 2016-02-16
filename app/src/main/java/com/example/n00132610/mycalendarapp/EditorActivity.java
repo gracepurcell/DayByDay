@@ -260,7 +260,7 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
             String lat = data.getStringExtra(MapActivity.LATITUDE_EXTRA);
             String lng = data.getStringExtra(MapActivity.LONGITUDE_EXTRA);
 
-            editorLocation.setText(lat + ", " + lng);
+            editorLocation.setText(lat + "," + lng);
         }
         else {
             Toast.makeText(this, "Error!", Toast.LENGTH_LONG).show();
