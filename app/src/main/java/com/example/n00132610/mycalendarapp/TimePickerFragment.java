@@ -16,7 +16,7 @@ import java.util.Calendar;
 /**
  * Created by Grace on 16/01/2016.
  */
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public class  TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -36,6 +36,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         //Get reference of host activity (XML Layout File) TextView widget
         EditText editTime = (EditText) getActivity().findViewById(R.id.editTime);
         //Display the user changed time on TextView
+        editTime.setText("");
         editTime.setText(editTime.getText() + String.valueOf(hourOfDay)
                 + ":" + String.valueOf(minute));
     }
