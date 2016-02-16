@@ -16,7 +16,10 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class DateActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -47,11 +50,11 @@ public class DateActivity extends AppCompatActivity implements LoaderManager.Loa
             Toast.makeText(this, "Date selected = " + dateString, Toast.LENGTH_LONG).show();
 
             String[] from = {DBOpenHelper.NOTE_TEXT};
-            String[] waypoints = {DBOpenHelper.NOTE_LOCATION};
             int[] to = {R.id.tvNote};
 
             cursorAdapter = new SimpleCursorAdapter(this,
                     R.layout.note_list_item, null, from, to, 0);
+
 
             ListView list = (ListView) findViewById(android.R.id.list);
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabDate);

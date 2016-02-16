@@ -17,6 +17,7 @@ import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +59,7 @@ public class RouteMapActivity extends FragmentActivity
     private static final int NOTES_LOADER = 0;
     private static final int NOTES_LOCATION = 1;
     private final String TAG = "MapsApp";
+    private SimpleCursorAdapter cursorAdapter;
 
     GoogleMap mMap;
     private static final int ERROR_DIALOG_REQUEST = 9001;
@@ -74,7 +76,8 @@ public class RouteMapActivity extends FragmentActivity
     private Date dt;
     private String dateString;
     ArrayList<LatLng> markerPoints;
-    private Loader<Cursor> fromCursorToArrayListString;
+
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -83,6 +86,12 @@ public class RouteMapActivity extends FragmentActivity
 
         dt = (Date) getIntent().getSerializableExtra(DATE_EXTRA);
         dateString = new SimpleDateFormat("yyyy-MM-dd").format(dt);
+
+        String[] markerPoints = new String[]{DBOpenHelper.NOTE_LOCATION};
+        int[] to = {R.id.map};
+
+        cursorAdapter = new SimpleCursorAdapter(this,
+                R.layout.activity_route_map, null, markerPoints, to, 0);
 
         getLoaderManager().initLoader(NOTES_LOADER, null, this);
 
@@ -365,7 +374,7 @@ public class RouteMapActivity extends FragmentActivity
 
             default: {
                 // An invalid id was passed in
-                return fromCursorToArrayListString;
+                return null;
             }
         }
     }
