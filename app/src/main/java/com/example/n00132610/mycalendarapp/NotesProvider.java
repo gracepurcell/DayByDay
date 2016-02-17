@@ -6,6 +6,12 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotesProvider extends ContentProvider{
 
@@ -45,12 +51,11 @@ public class NotesProvider extends ContentProvider{
         }
 
         return database.query(DBOpenHelper.TABLE_NOTES, DBOpenHelper.ALL_COLUMNS,
-                selection, null, null, null,
-                DBOpenHelper.NOTE_CREATED + " DESC");
+                selection, selectionArgs, null, null, sortOrder);
     }
 
     @Override
-    public String getType(Uri uri) {
+     public String getType(Uri uri) {
         return null;
     }
 
@@ -69,4 +74,5 @@ public class NotesProvider extends ContentProvider{
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return database.update(DBOpenHelper.TABLE_NOTES, values, selection, selectionArgs);
     }
+
 }
