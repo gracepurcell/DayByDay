@@ -4,7 +4,6 @@ package com.example.n00132610.mycalendarapp;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -69,7 +68,6 @@ public class RouteMapActivity extends FragmentActivity
 
     public static final String DATE_EXTRA = "date";
     private static final int NOTES_LOADER = 0;
-    private static final int NOTES_LOCATION = 1;
     private final String TAG = "MapsApp";
     private SimpleCursorAdapter cursorAdapter;
 
@@ -84,12 +82,9 @@ public class RouteMapActivity extends FragmentActivity
     Circle shape;
     public String lat;
     public String lng;
-    String location = lat + "," + lng;
     private Date dt;
     private String dateString;
     ArrayList<LatLng> markerPoints;
-    private Cursor mCursor;
-
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -201,9 +196,9 @@ public class RouteMapActivity extends FragmentActivity
                     }
 
                     Address add = list.get(0);
-                    RouteMapActivity.this.addMarker(add, latLng.latitude, latLng.longitude);
-                    lat = String.valueOf(marker.getPosition().latitude);
-                    lng = String.valueOf(marker.getPosition().longitude);
+//                    RouteMapActivity.this.addMarker(add, latLng.latitude, latLng.longitude);
+//                    lat = String.valueOf(marker.getPosition().latitude);
+//                    lng = String.valueOf(marker.getPosition().longitude);
                 }
             });
 
@@ -331,6 +326,7 @@ public class RouteMapActivity extends FragmentActivity
     }
 
 
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
@@ -344,9 +340,10 @@ public class RouteMapActivity extends FragmentActivity
                         null,                                           // Projection to return
                         DBOpenHelper.NOTE_DATE + " = '" + dateString + "'",    // No selection clause
                         null,                                           // No selection arguments
-                        DBOpenHelper.NOTE_TIME + " ASC"             // Sort order;
+                        DBOpenHelper.NOTE_TIME +  " ASC"                                            // Default sort order; or DBOpenHelper.NOTE_CREATED + " DESC"
                 );
             }
+
             default: {
                 return null;
             }
@@ -355,8 +352,10 @@ public class RouteMapActivity extends FragmentActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
         ArrayList<LatLng> points = new ArrayList<LatLng>();
         PolylineOptions lineOptions;
+
         try {
             int columnIndex = data.getColumnIndex(DBOpenHelper.NOTE_LOCATION);
             while (data.moveToNext()) {
@@ -367,6 +366,15 @@ public class RouteMapActivity extends FragmentActivity
                 double lat = Double.parseDouble(latString);
                 double lng = Double.parseDouble(longString);
                 points.add(new LatLng(lat, lng));
+            }
+
+            for (int j = 0; j < points.size(); j++) {
+
+                MarkerOptions options = new MarkerOptions();
+                options.position(points.get(j));
+                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                // Add new marker to the Google Map Android API V2
+                mMap.addMarker(options);
             }
 
             if (points.size() >= 2) {
@@ -534,8 +542,8 @@ public class RouteMapActivity extends FragmentActivity
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(5);
-                lineOptions.color(Color.RED);
+                lineOptions.width(15);
+                lineOptions.color(Color.parseColor("#FF009688"));
             }
 
             // Drawing polyline in the Google Map for the i-th route
