@@ -330,47 +330,6 @@ public class RouteMapActivity extends FragmentActivity
 
     }
 
-//    public void bindView(View view, Context context, Cursor cursor) {
-//        //String noteText = cursor.getString(cursor.getColumnIndex(DBOpenHelper.NOTE_LOCATION));
-//        ArrayList<LatLng> markerPoints = new ArrayList<>();
-//        cursor.moveToFirst();
-//        for(int i = 0; i < cursor.getCount(); i++){
-//            String row = cursor.getString(cursor.getColumnIndex(DBOpenHelper.NOTE_LOCATION));
-//            markerPoints.toArray(new String[]{row});
-//            cursor.moveToNext();
-//            Log.i("result ", "Result : " + markerPoints.toString());
-//        }
-//    }
-//
-//    ArrayList<LatLng> fromCursorToArrayListString(Cursor c){
-//        ArrayList markerPoints = new ArrayList<>();
-//        c.moveToFirst();
-//        for(int i = 0; i < c.getCount(); i++){
-//            String row = c.getString(c.getColumnIndex(DBOpenHelper.NOTE_LOCATION));
-//            markerPoints.toArray(new String[]{row});
-//            c.moveToNext();
-//            Log.i("result ", "Result : " + markerPoints.toString());
-//        }
-//        return markerPoints;
-//    }
-
-//    public ArrayList<LatLng> getAllStringValues() {
-//        ArrayList<String> yourStringValues = new ArrayList<String>();
-//        Cursor result = DBOpenHelper.query(true, notes.db
-//                new String[] { YOUR_COLUMN_NAME }, null, null, null, null,
-//                null, null);
-//
-//        if (result.moveToFirst()) {
-//            do {
-//                yourStringValues.add(result.getString(result
-//                        .getColumnIndex(YOUR_COLUMN_NAME)));
-//            } while (result.moveToNext());
-//        } else {
-//            return null;
-//        }
-//        return YOUR_COLUMN_NAME;
-//    }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -385,10 +344,9 @@ public class RouteMapActivity extends FragmentActivity
                         null,                                           // Projection to return
                         DBOpenHelper.NOTE_DATE + " = '" + dateString + "'",    // No selection clause
                         null,                                           // No selection arguments
-                        null                                            // Default sort order; or DBOpenHelper.NOTE_CREATED + " DESC"
+                        DBOpenHelper.NOTE_TIME + " ASC"             // Sort order;
                 );
             }
-
             default: {
                 return null;
             }

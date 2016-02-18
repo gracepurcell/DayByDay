@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -33,9 +34,9 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
 
     private String action;
     private EditText editor;
-    private EditText editorDate;
-    private EditText editorTime;
-    private EditText editorLocation;
+    private TextView editorDate;
+    private TextView editorTime;
+    private TextView editorLocation;
     private ImageButton dateButton;
     private ImageButton timeButton;
     private ImageButton locationButton;
@@ -54,9 +55,9 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_editor);
 
         editor = (EditText) findViewById(R.id.editText);
-        editorDate = (EditText) findViewById(R.id.editDate);
-        editorTime = (EditText) findViewById(R.id.editTime);
-        editorLocation = (EditText) findViewById(R.id.editLocation);
+        editorDate = (TextView) findViewById(R.id.editDate);
+        editorTime = (TextView) findViewById(R.id.editTime);
+        editorLocation = (TextView) findViewById(R.id.editLocation);
         dateButton = (ImageButton) findViewById(R.id.imgButtonCal);
         timeButton = (ImageButton) findViewById(R.id.imgButtonClock);
         locationButton = (ImageButton) findViewById(R.id.imgButtonMap);
@@ -101,13 +102,10 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
                 editor.setText(oldText);
                 editor.setEnabled(false);
                 editorDate.setText(oldDate);
-                editorDate.setEnabled(false);
                 dateButton.setEnabled(false);
                 editorTime.setText(oldTime);
-                editorTime.setEnabled(false);
                 timeButton.setEnabled(false);
                 editorLocation.setText(oldLocation);
-                editorLocation.setEnabled(false);
                 locationButton.setEnabled(false);
                 editor.requestFocus();
             }
@@ -161,15 +159,9 @@ public class EditorActivity extends AppCompatActivity implements Serializable {
         mEditmode = editMode;
         if(NotesProvider.CONTENT_URI != null) {
             editor.setEnabled(editMode);
-            editorDate.setEnabled(editMode);
             dateButton.setEnabled(editMode);
-            editorTime.setEnabled(editMode);
             timeButton.setEnabled(editMode);
-            editorLocation.setEnabled(editMode);
             locationButton.setEnabled(editMode);
-
-            //saveButton.setEnabled(true);
-            //saveButton = (FloatingActionButton) findViewById(R.id.fabSave);
         }
     }
     private void deleteNote() {
