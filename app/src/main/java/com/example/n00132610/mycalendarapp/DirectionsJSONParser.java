@@ -16,6 +16,7 @@ public class DirectionsJSONParser {
     /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
 
+        /** Adds the list of arrays for the data to be stored in when it comes in. */
         List<List<HashMap<String, String>>> routes = new ArrayList<List<HashMap<String,String>>>();
         JSONArray jRoutes = null;
         JSONArray jLegs = null;

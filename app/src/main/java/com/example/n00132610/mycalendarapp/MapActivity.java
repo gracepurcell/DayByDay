@@ -1,8 +1,10 @@
 package com.example.n00132610.mycalendarapp;
 
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -10,7 +12,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -46,15 +50,9 @@ public class MapActivity extends FragmentActivity
     public static final String LATITUDE_EXTRA = "latitude";
     public static final String LONGITUDE_EXTRA = "longitude";
     GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
-    private Location mCurrentLocation;
     private static final int ERROR_DIALOG_REQUEST = 9001;
-    private static final int EDITOR_REQUEST_CODE = 1001;
-    public static final String LOCAT_KEY = "location";
     private GoogleApiClient mLocationClient;
     private Marker marker;
-    Bundle bundle;
-    String value;
     private static final double
             CITY_LAT = 53.3478,
             CITY_LNG = -6.2597;
@@ -62,34 +60,38 @@ public class MapActivity extends FragmentActivity
     Circle shape;
     public String lat;
     public String lng;
-    String location = lat + "," + lng;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /** Setting the view of the intent to the map */
         setContentView(R.layout.activity_map);
 
+        /** Adding the location manager so you can tell where you are */
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean enabled = service
                 .isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        // check if enabled and if not send user to the GSP settings
+        /** check if enabled and if not send user to the GSP settings*/
 
         if (!enabled) {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
         }
 
-        // Getting reference to Button
+        /** Getting reference to Button */
         Button btnDraw = (Button) findViewById(R.id.btn_draw);
 
+        /** If the services can connect and the location can be enabled start the map */
         if (servicesOK()) {
             mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
             if (initMap()) {
 
+                /** Default location for the map to start at*/
                 gotoLocation(CITY_LAT, CITY_LNG, 12);
 
+                /** Get the location you are currently positioned at */
                 mMap.setMyLocationEnabled(true);
 
                 mLocationClient = new GoogleApiClient.Builder(this)
@@ -109,8 +111,7 @@ public class MapActivity extends FragmentActivity
             mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         }
 
-        bundle = new Bundle();
-
+        /** Drawing the button that you can see. Click the button to start a new intent and pass the values for it */
         btnDraw.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -125,12 +126,14 @@ public class MapActivity extends FragmentActivity
         });
     }
 
+    /** Go to a certain location for the user map */
     private void gotoLocation(double lat, double lng, float zoom) {
         LatLng latLng = new LatLng(lat, lng);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
         mMap.moveCamera(update);
     }
 
+    /** This is where the magic happens. Most of the code for the map parts belongs here */
     public boolean initMap() {
         if (mMap == null) {
             SupportMapFragment mapFragment = (SupportMapFragment)
@@ -145,6 +148,7 @@ public class MapActivity extends FragmentActivity
                     return null;
                 }
 
+                /** Get the contents of the marker placed by the long click on the map.*/
                 @Override
                 public View getInfoContents(Marker marker) {
                     View v = getLayoutInflater().inflate(R.layout.info_window, null);
@@ -153,6 +157,7 @@ public class MapActivity extends FragmentActivity
                     TextView tvLng = (TextView) v.findViewById(R.id.tvLng);
                     TextView tvSnippet = (TextView) v.findViewById(R.id.tvSnippet);
 
+                    /** Setting the marker position to the LatLng that the user presses. */
                     LatLng latLng = marker.getPosition();
                     tvLocality.setText(marker.getTitle());
                     tvLat.setText("Latitude: " + latLng.latitude);
@@ -163,9 +168,10 @@ public class MapActivity extends FragmentActivity
                 }
             });
 
-            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                /** Map listener to say when the user clicks on the map make a new marker appear  */
                 @Override
-                public void onMapLongClick(LatLng latLng) {
+                public void onMapClick(LatLng latLng) {
                     Geocoder gc = new Geocoder(MapActivity.this);
                     List<Address> list = null;
 
@@ -185,6 +191,8 @@ public class MapActivity extends FragmentActivity
 
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
+
+                /** On marker click  display a message with the location of the marker*/
                 public boolean onMarkerClick(Marker marker) {
                     String msg = marker.getTitle() + " (" +
                             marker.getPosition().latitude + ", " +
@@ -208,6 +216,7 @@ public class MapActivity extends FragmentActivity
             }
 
             @Override
+            /** You cam drag the marker to a new location if you misclick*/
             public void onMarkerDragEnd(Marker marker) {
                 Geocoder gc = new Geocoder(MapActivity.this);
                 List<Address> list = null;
@@ -229,6 +238,7 @@ public class MapActivity extends FragmentActivity
         return (mMap != null);
     }
 
+    /** Showing the service is ok. Was called up the top*/
     public boolean servicesOK() {
 
         // this is my error message
@@ -247,6 +257,7 @@ public class MapActivity extends FragmentActivity
     }
 
 
+    /** Adding a marker element for the map*/
     public void addMarker(Address add, double lat, double lng) {
 
         if (marker != null) {
@@ -277,15 +288,7 @@ public class MapActivity extends FragmentActivity
         shape = mMap.addCircle(circleOptions);
     }
 
-//    public void onLocationSet(String lat, String lng) {
-//        location = mMap.getInstance();
-//        location.set(lat,lng);
-//        EditText editLocation = (EditText) getActivity().findViewById(R.id.editLocation);
-//
-//        String locatStr = sdf.format(location.getTime());
-//        editLocation.setText(locatStr);
-//    }
-
+    /** Removing everything is the marker needs to be removed.*/
     private void removeEverything() {
 
         marker.remove();
@@ -314,19 +317,5 @@ public class MapActivity extends FragmentActivity
     public void onLocationChanged(Location location) {
 
     }
-
-//    public void showCurrentLocation(MenuItem item) {
-//        Location currentLocation = LocationServices.FusedLocationApi
-//                .getLastLocation(mLocationClient);
-//        if (currentLocation == null) {
-//            Toast.makeText(this, "Couldn't connect!", Toast.LENGTH_SHORT).show();
-//        } else {
-//            LatLng latLng = new LatLng(
-//                    currentLocation.getLatitude(),
-//                    currentLocation.getLongitude()
-//            );
-//            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-//            mMap.animateCamera(update);
-//        }
 
 }

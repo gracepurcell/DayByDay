@@ -37,10 +37,12 @@ public class DateActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date);
+        /** collecting the date carried from the calendar object on the main activity  */
         Intent i = this.getIntent();
         final long time = i.getLongExtra(TIME_KEY, -1);
 
         if (time != -1) {
+            /** storing the extra and formatting it to show a certain way  */
             dt = new Date(time);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             final String dateString = sdf.format(dt);
@@ -85,13 +87,14 @@ public class DateActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    /** specifying what menu to use in this particular activity */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_date, menu);
         return true;
     }
-
+    /** stating what each option in the menu does when clicked */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -121,10 +124,12 @@ public class DateActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    /** restarting loader created*/
     private void restartLoader() {
         getLoaderManager().restartLoader(0, cursorArgs, this);
     }
 
+    /** method to start EditorActivity*/
     public void openEditorForNewNote(View view) {
         Intent intent = new Intent(this, EditorActivity.class);
         //String str = dateString;
@@ -132,6 +137,7 @@ public class DateActivity extends AppCompatActivity implements LoaderManager.Loa
         startActivityForResult(intent, EDITOR_REQUEST_CODE);
     }
 
+    /** creating new loader for cursor  */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String dateString = args.getString(TIME_KEY);

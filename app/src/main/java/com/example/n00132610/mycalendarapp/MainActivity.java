@@ -35,21 +35,26 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /** Telling the application to run your version of your code as well as default for onCreate */
         super.onCreate(savedInstanceState);
+        /** specifying which xml layout to use with this particular activity */
         setContentView(R.layout.activity_main);
         setTitle("Day by Day");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         String[] from = {DBOpenHelper.NOTE_TEXT, DBOpenHelper.NOTE_DATE};
         int[] to = {R.id.tvNote};
 
+        /** creating new cursor adapter to use*/
         cursorAdapter = new SimpleCursorAdapter(this,
                 R.layout.note_list_item, null, from, to, 0);
 
         CalendarView cal = (CalendarView) findViewById(R.id.calendar);
 
+        /** creating on click listener for viewing a certain date on the calendar > DateActivity */
         cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
@@ -64,11 +69,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-
+        /** creating new view on screen to display what is stored in database */
         ListView list = (ListView) findViewById(android.R.id.list);
         list.setAdapter(cursorAdapter);
 
+        /** creating new on click listener to bring you to view a certain note you have saved in the database. > EditorActivity */
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -81,16 +86,7 @@ public class MainActivity extends AppCompatActivity
         getLoaderManager().initLoader(0, null, this);
     }
 
-    private void deleteNote() {
-        getContentResolver().delete(NotesProvider.CONTENT_URI,
-                noteFilter,null);
-        Toast.makeText(this, R.string.note_deleted,
-                Toast.LENGTH_SHORT).show();
-        setResult(RESULT_OK);
-
-        finish();
-    }
-
+    /** method used to create a new note into the database  */
     private void insertNote(String noteText, String noteDate, String noteTime, String noteLocation) {
         ContentValues values = new ContentValues();
         values.put(DBOpenHelper.NOTE_TEXT, noteText);
@@ -100,6 +96,7 @@ public class MainActivity extends AppCompatActivity
         Uri noteUri = getContentResolver().insert(NotesProvider.CONTENT_URI, values);
     }
 
+    /** specifying what menu to use in this particular activity */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -107,6 +104,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /** stating what each option in the menu does when clicked */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -123,6 +121,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /** the method to delete everything in the database */
     private void deleteAllNotes() {
         DialogInterface.OnClickListener dialogClickListener =
                 new DialogInterface.OnClickListener() {
@@ -149,6 +148,9 @@ public class MainActivity extends AppCompatActivity
                 .show();
     }
 
+    /** this method is purely designed for demonstration purposes
+     * in order to show how it works when everything is used correctly.
+     * Creates sample data so that you can easily see how it works etc.*/
     private void insertSampleData() {
         insertNote("Walk the dog", "2016-02-12", "15:45", "53.366889980492545,-6.2345464645444");
         insertNote("Go Shopping", "2016-02-12", "12:00", "53.3668766812,-6.23445784");
@@ -158,10 +160,12 @@ public class MainActivity extends AppCompatActivity
         restartLoader();
     }
 
+    /** restarting loader created*/
     private void restartLoader() {
         getLoaderManager().restartLoader(0, null, this);
     }
 
+    /** creating new loader for cursor  */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this, NotesProvider.CONTENT_URI, null, null, null, null);
@@ -177,6 +181,7 @@ public class MainActivity extends AppCompatActivity
         cursorAdapter.swapCursor(null);
     }
 
+    /** method to start EditorActivity*/
     public void openEditorForNewNote(View view) {
         Intent intent = new Intent(this, EditorActivity.class);
         startActivityForResult(intent, EDITOR_REQUEST_CODE);

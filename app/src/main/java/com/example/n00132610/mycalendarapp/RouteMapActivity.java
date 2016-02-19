@@ -91,6 +91,8 @@ public class RouteMapActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_map);
 
+
+        /** Adding it so it passes in the date that you are currently clicked on as an extra. */
         dt = (Date) getIntent().getSerializableExtra(DATE_EXTRA);
         dateString = new SimpleDateFormat("yyyy-MM-dd").format(dt);
 
@@ -195,10 +197,6 @@ public class RouteMapActivity extends FragmentActivity
                         return;
                     }
 
-                    Address add = list.get(0);
-//                    RouteMapActivity.this.addMarker(add, latLng.latitude, latLng.longitude);
-//                    lat = String.valueOf(marker.getPosition().latitude);
-//                    lng = String.valueOf(marker.getPosition().longitude);
                 }
             });
 
@@ -326,7 +324,7 @@ public class RouteMapActivity extends FragmentActivity
     }
 
 
-
+    /** Adding a cursor loader so it can pass a SQL statement to the database and get the LAtLng as a return*/
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
@@ -350,6 +348,7 @@ public class RouteMapActivity extends FragmentActivity
         }
     }
 
+    /** When the data gets passed back set up an array list and store the Lat Lng data into a string.*/
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
@@ -360,14 +359,17 @@ public class RouteMapActivity extends FragmentActivity
             int columnIndex = data.getColumnIndex(DBOpenHelper.NOTE_LOCATION);
             while (data.moveToNext()) {
                 String latLongStr = data.getString(columnIndex);
+                /** Getting the data as a whole and braking it down so it can be used.*/
                 StringTokenizer tokens = new StringTokenizer(latLongStr, ",");
                 String latString = tokens.nextToken();
                 String longString = tokens.nextToken();
                 double lat = Double.parseDouble(latString);
                 double lng = Double.parseDouble(longString);
+                /** Adding the data to the points array everytime there is a point to be added.*/
                 points.add(new LatLng(lat, lng));
             }
 
+            /** For every point there is add a new marker on it so the user can view the points that they have inputted*/
             for (int j = 0; j < points.size(); j++) {
 
                 MarkerOptions options = new MarkerOptions();
@@ -377,13 +379,14 @@ public class RouteMapActivity extends FragmentActivity
                 mMap.addMarker(options);
             }
 
+            /** Passing the data so the JSON being sent to google will know the origin and the Destination + waypoints */
             if (points.size() >= 2) {
                 LatLng origin = points.get(0);
                 LatLng dest = points.get(1);
 
                 String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
 
-                // Destination of route
+                /** Destination of route */
                 String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
                 String sensor = "sensor=false";
@@ -396,18 +399,18 @@ public class RouteMapActivity extends FragmentActivity
                     waypoints += point.latitude + "," + point.longitude + "|";
                 }
 
-                // Building the parameters to the web service
+                /** Building the parameters to the web service */
                 String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + waypoints;
 
-                // Output format
+                /** Output format */
                 String output = "json";
 
-                // Building the url to the web service
+                /** Building the url to the web service */
                 String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
                 DownloadTask downloadTask = new DownloadTask();
 
-                // Start downloading json data from Google Directions API
+                /** Start downloading json data from Google Directions API */
                 downloadTask.execute(url);
             }
         }
@@ -422,16 +425,16 @@ public class RouteMapActivity extends FragmentActivity
 
     private class DownloadTask extends AsyncTask<String, Void, String> {
 
-        // Downloading data in non-ui thread
+        /** Downloading data in non-ui thread */
         @Override
         protected String doInBackground(String... url) {
 
-            // For storing data from web service
+            /** For storing data from web service */
 
             String data = "";
 
             try {
-                // Fetching the data from web service
+                /** Fetching the data from web service */
                 data = downloadUrl(url[0]);
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
@@ -439,15 +442,14 @@ public class RouteMapActivity extends FragmentActivity
             return data;
         }
 
-        // Executes in UI thread, after the execution of
-        // doInBackground()
+        /** Executes in UI thread, after the execution of doInBackground() */
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
             ParserTask parserTask = new ParserTask();
 
-            // Invokes the thread for parsing the JSON data
+            /** Invokes the thread for parsing the JSON data */
             parserTask.execute(result);
         }
 
@@ -458,13 +460,13 @@ public class RouteMapActivity extends FragmentActivity
             try {
                 URL url = new URL(strUrl);
 
-                // Creating an http connection to communicate with url
+                /** Creating an http connection to communicate with url */
                 urlConnection = (HttpURLConnection) url.openConnection();
 
-                // Connecting to url
+                /** Connecting to url */
                 urlConnection.connect();
 
-                // Reading data from url
+                /** Reading data from url */
                 iStream = urlConnection.getInputStream();
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
@@ -491,11 +493,11 @@ public class RouteMapActivity extends FragmentActivity
     }
 
     /**
-     * A class to parse the Google Places in JSON format
+     * Parse the Google Places in JSON format
      */
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        // Parsing the data in non-ui thread
+        /** Parsing the data in non-ui thread */
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
@@ -506,7 +508,7 @@ public class RouteMapActivity extends FragmentActivity
                 jObject = new JSONObject(jsonData[0]);
                 DirectionsJSONParser parser = new DirectionsJSONParser();
 
-                // Starts parsing data
+                /** Starts parsing data */
                 routes = parser.parse(jObject);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -514,22 +516,22 @@ public class RouteMapActivity extends FragmentActivity
             return routes;
         }
 
-        // Executes in UI thread, after the parsing process
+        /** Executes in UI thread, after the parsing process */
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
 
             ArrayList<LatLng> points = null;
             PolylineOptions lineOptions = null;
 
-            // Traversing through all the routes
+            /** Traversing through all the routes */
             for (int i = 0; i < result.size(); i++) {
                 points = new ArrayList<LatLng>();
                 lineOptions = new PolylineOptions();
 
-                // Fetching i-th route
+                /** Fetching i-th route */
                 List<HashMap<String, String>> path = result.get(i);
 
-                // Fetching all the points in i-th route
+                /** Fetching all the points in i-th route */
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
 
@@ -540,13 +542,13 @@ public class RouteMapActivity extends FragmentActivity
                     points.add(position);
                 }
 
-                // Adding all the points in the route to LineOptions
+                /** Adding all the points in the route to LineOptions */
                 lineOptions.addAll(points);
                 lineOptions.width(15);
                 lineOptions.color(Color.parseColor("#FF009688"));
             }
 
-            // Drawing polyline in the Google Map for the i-th route
+            /** Drawing polyline in the Google Map for the i-th route */
             mMap.addPolyline(lineOptions);
         }
     }

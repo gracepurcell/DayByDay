@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Calendar App</string>
+    <string name="app_name">Day by Day</string>
     <string name="title_activity_editor">EditorActivity</string>
     <string name="create_sample_data">Create sample data</string>
     <string name="delete_all_notes">Delete all notes</string>
